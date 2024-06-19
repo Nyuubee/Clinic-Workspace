@@ -1,0 +1,1 @@
+ALTER TABLE "dental_chart" ADD COLUMN "other_allergy" text;

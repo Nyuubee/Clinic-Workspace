@@ -1,0 +1,1075 @@
+{
+  "id": "c4b19dc2-ae31-4b41-a585-a5ef8c3e3940",
+  "prevId": "6b035eb3-c3ed-4753-a4d6-3730922667f2",
+  "version": "6",
+  "dialect": "postgresql",
+  "tables": {
+    "public.auth": {
+      "name": "auth",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "username": {
+          "name": "username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "name": "password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "salt": {
+          "name": "salt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "auth_user_id_user_id_fk": {
+          "name": "auth_user_id_user_id_fk",
+          "tableFrom": "auth",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "auth_username_unique": {
+          "name": "auth_username_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "username"
+          ]
+        }
+      }
+    },
+    "public.treatment": {
+      "name": "treatment",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "dental_record_id": {
+          "name": "dental_record_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount_charged": {
+          "name": "amount_charged",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "procedure": {
+          "name": "procedure",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "next_appointment": {
+          "name": "next_appointment",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "treatment_dental_record_id_dental_record_id_fk": {
+          "name": "treatment_dental_record_id_dental_record_id_fk",
+          "tableFrom": "treatment",
+          "tableTo": "dental_record",
+          "columnsFrom": [
+            "dental_record_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.patient_record": {
+      "name": "patient_record",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "religion": {
+          "name": "religion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "occupation": {
+          "name": "occupation",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "home_address": {
+          "name": "home_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nationality": {
+          "name": "nationality",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "home_no": {
+          "name": "home_no",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "office_no": {
+          "name": "office_no",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fax_no": {
+          "name": "fax_no",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "parent_guardian": {
+          "name": "parent_guardian",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "parent_guardian_occupation": {
+          "name": "parent_guardian_occupation",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "referrer": {
+          "name": "referrer",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "consultation_reason": {
+          "name": "consultation_reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "previous_dentist": {
+          "name": "previous_dentist",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_dental_visit": {
+          "name": "last_dental_visit",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "physician": {
+          "name": "physician",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "specialty": {
+          "name": "specialty",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "office_address": {
+          "name": "office_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "office_number": {
+          "name": "office_number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_in_good_health": {
+          "name": "is_in_good_health",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "": {
+          "name": "",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "illness_operation": {
+          "name": "illness_operation",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_hospitalization": {
+          "name": "last_hospitalization",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hospitalization_reason": {
+          "name": "hospitalization_reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "prescribed_or_nonprescribed_medicine": {
+          "name": "prescribed_or_nonprescribed_medicine",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "uses_tobacco": {
+          "name": "uses_tobacco",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "consumes_alcohol": {
+          "name": "consumes_alcohol",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "uses_dangerous_drugs": {
+          "name": "uses_dangerous_drugs",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "allergies": {
+          "name": "allergies",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bleeding_time": {
+          "name": "bleeding_time",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_pregnant": {
+          "name": "is_pregnant",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_nursing": {
+          "name": "is_nursing",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_taking_birth_control": {
+          "name": "is_taking_birth_control",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "blood_type": {
+          "name": "blood_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "many_conditions": {
+          "name": "many_conditions",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "patient_record_user_id_user_id_fk": {
+          "name": "patient_record_user_id_user_id_fk",
+          "tableFrom": "patient_record",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.user": {
+      "name": "user",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "middle_name": {
+          "name": "middle_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "suffix": {
+          "name": "suffix",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nick_name": {
+          "name": "nick_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role": {
+          "name": "role",
+          "type": "role",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "phone": {
+          "name": "phone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sex": {
+          "name": "sex",
+          "type": "sex",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "birth_date": {
+          "name": "birth_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.payment": {
+      "name": "payment",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "treatment_id": {
+          "name": "treatment_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount": {
+          "name": "amount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "method": {
+          "name": "method",
+          "type": "method",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "payment_treatment_id_treatment_id_fk": {
+          "name": "payment_treatment_id_treatment_id_fk",
+          "tableFrom": "payment",
+          "tableTo": "treatment",
+          "columnsFrom": [
+            "treatment_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.TMD": {
+      "name": "TMD",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "clenching": {
+          "name": "clenching",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "clicking": {
+          "name": "clicking",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "trismus": {
+          "name": "trismus",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "muscle_spasm": {
+          "name": "muscle_spasm",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.appliances": {
+      "name": "appliances",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "orthodontic": {
+          "name": "orthodontic",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stayplate": {
+          "name": "stayplate",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "others_content": {
+          "name": "others_content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.dental_record": {
+      "name": "dental_record",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "doctor_id": {
+          "name": "doctor_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "patient_id": {
+          "name": "patient_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "periodental_screening_id": {
+          "name": "periodental_screening_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "occlusion_id": {
+          "name": "occlusion_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "appliances_id": {
+          "name": "appliances_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TMD_id": {
+          "name": "TMD_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "xray_taken_id": {
+          "name": "xray_taken_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "dental_record_doctor_id_user_id_fk": {
+          "name": "dental_record_doctor_id_user_id_fk",
+          "tableFrom": "dental_record",
+          "tableTo": "user",
+          "columnsFrom": [
+            "doctor_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "dental_record_patient_id_user_id_fk": {
+          "name": "dental_record_patient_id_user_id_fk",
+          "tableFrom": "dental_record",
+          "tableTo": "user",
+          "columnsFrom": [
+            "patient_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "dental_record_periodental_screening_id_periodental_screening_id_fk": {
+          "name": "dental_record_periodental_screening_id_periodental_screening_id_fk",
+          "tableFrom": "dental_record",
+          "tableTo": "periodental_screening",
+          "columnsFrom": [
+            "periodental_screening_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "dental_record_occlusion_id_occlusion_id_fk": {
+          "name": "dental_record_occlusion_id_occlusion_id_fk",
+          "tableFrom": "dental_record",
+          "tableTo": "occlusion",
+          "columnsFrom": [
+            "occlusion_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "dental_record_appliances_id_appliances_id_fk": {
+          "name": "dental_record_appliances_id_appliances_id_fk",
+          "tableFrom": "dental_record",
+          "tableTo": "appliances",
+          "columnsFrom": [
+            "appliances_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "dental_record_TMD_id_TMD_id_fk": {
+          "name": "dental_record_TMD_id_TMD_id_fk",
+          "tableFrom": "dental_record",
+          "tableTo": "TMD",
+          "columnsFrom": [
+            "TMD_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "dental_record_xray_taken_id_xray_taken_id_fk": {
+          "name": "dental_record_xray_taken_id_xray_taken_id_fk",
+          "tableFrom": "dental_record",
+          "tableTo": "xray_taken",
+          "columnsFrom": [
+            "xray_taken_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.occlusion": {
+      "name": "occlusion",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "molar_class": {
+          "name": "molar_class",
+          "type": "occlusion_molar_class",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "overjet": {
+          "name": "overjet",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "overbite": {
+          "name": "overbite",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "midline_deviation": {
+          "name": "midline_deviation",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crossbite": {
+          "name": "crossbite",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.periodental_screening": {
+      "name": "periodental_screening",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "gingivitis": {
+          "name": "gingivitis",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "early_periodontitis": {
+          "name": "early_periodontitis",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "moderate_periodontitis": {
+          "name": "moderate_periodontitis",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "advanced_periodontitis": {
+          "name": "advanced_periodontitis",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.tooth_condition": {
+      "name": "tooth_condition",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "treatment_id": {
+          "name": "treatment_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tooth_id": {
+          "name": "tooth_id",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "condition": {
+          "name": "condition",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "tooth_condition_treatment_id_dental_record_id_fk": {
+          "name": "tooth_condition_treatment_id_dental_record_id_fk",
+          "tableFrom": "tooth_condition",
+          "tableTo": "dental_record",
+          "columnsFrom": [
+            "treatment_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.xray_taken": {
+      "name": "xray_taken",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "periapical": {
+          "name": "periapical",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tth_no": {
+          "name": "tth_no",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "panoramic": {
+          "name": "panoramic",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cephalometric": {
+          "name": "cephalometric",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "occlusal": {
+          "name": "occlusal",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "others": {
+          "name": "others",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {
+    "public.role": {
+      "name": "role",
+      "schema": "public",
+      "values": [
+        "admin",
+        "doctor",
+        "patient"
+      ]
+    },
+    "public.sex": {
+      "name": "sex",
+      "schema": "public",
+      "values": [
+        "male",
+        "female"
+      ]
+    },
+    "public.method": {
+      "name": "method",
+      "schema": "public",
+      "values": [
+        "cash",
+        "credit",
+        "debit",
+        "check"
+      ]
+    },
+    "public.occlusion_molar_class": {
+      "name": "occlusion_molar_class",
+      "schema": "public",
+      "values": [
+        "Normal",
+        "I",
+        "II",
+        "III"
+      ]
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

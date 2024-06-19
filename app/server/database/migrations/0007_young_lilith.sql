@@ -1,0 +1,20 @@
+ALTER TABLE "patient_record" ALTER COLUMN "religion" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "patient_record" ALTER COLUMN "occupation" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "patient_record" ALTER COLUMN "nationality" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "patient_record" ALTER COLUMN "home_address" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "patient_record" ALTER COLUMN "home_no" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "patient_record" ALTER COLUMN "parent_guardian" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "patient_record" ALTER COLUMN "parent_guardian_occupation" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "patient_record" ALTER COLUMN "referrer" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "patient_record" ALTER COLUMN "consultation_reason" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "patient_record" ALTER COLUMN "medicalCondition" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "patient_record" ALTER COLUMN "illness_operation" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "patient_record" ALTER COLUMN "hospitalization_reason" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "patient_record" ALTER COLUMN "prescribed_or_nonprescribed_medicine" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "patient_record" ALTER COLUMN "uses_tobacco" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "patient_record" ALTER COLUMN "consumes_alcohol" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "patient_record" ALTER COLUMN "uses_dangerous_drugs" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "patient_record" ALTER COLUMN "bleeding_time" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "patient_record" ALTER COLUMN "is_pregnant" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "patient_record" ALTER COLUMN "is_nursing" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "patient_record" ALTER COLUMN "is_taking_birth_control" SET NOT NULL;

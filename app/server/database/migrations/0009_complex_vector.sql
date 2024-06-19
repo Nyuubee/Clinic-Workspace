@@ -1,0 +1,1 @@
+ALTER TABLE "patient_record" ADD COLUMN "bleeding_time" integer NOT NULL;

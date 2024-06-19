@@ -1,0 +1,1 @@
+ALTER TABLE "user" ADD CONSTRAINT "user_first_name_middle_name_last_name_suffix_birth_date_role_unique" UNIQUE("first_name","middle_name","last_name","suffix","birth_date","role");

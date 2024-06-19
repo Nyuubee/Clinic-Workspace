@@ -1,0 +1,1 @@
+ALTER TABLE "treatment" RENAME COLUMN "tooth_nos" TO "tooth_numbers";
