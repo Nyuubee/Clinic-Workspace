@@ -1,10 +1,10 @@
 <template>
     <div class="flex flex-col items-center">
       <FormKit type="form" id="registration-example"
-      :form-class="submitted ? 'hide' : 'show'"
+
       submit-label="Register"
       @submit="onSubmit"
-      :actions="false"
+
       >
       <div class="gap-y-4 gap-x-8 flex flex-col xl:flex-row" > 
       <!-- first name -->
@@ -41,24 +41,34 @@
     
 </template>
 <script setup lang="ts">
+import { appointments } from "~/server/database/schema";
 import type { SubmitHandler } from "~/utils/formkit";
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-const onSubmit: SubmitHandler<{
-  firstName:string,
-  middleName:string,
-  lastName:string,
-  appointmentDate:Date,
-  appointmentTime:string,
-  purpose:string,
-  notes:string
+const router = useRouter()
 
-}> = async (value, node) => {
-  console.log(value)
-  const response = await $fetch('/api/appointments', {
-    method: "POST",
-    body:value
-  })
+const onSubmit = async (formData) => {
+  try {
+    const response = await fetch('/api/appointments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
 
+    if (!response.ok) {
+      throw new Error('Failed to submit form')
+    }
+
+    const result = await response.json()
+    console.log('Success:', result)
+    // Navigate to another page or show success message
+  } catch (error) {
+    console.error('Error:', error)
+    // Handle error, show error message
+  }
 }
 </script>
 

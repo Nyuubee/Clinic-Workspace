@@ -4,3 +4,4 @@ export * from "./user";
 export * from "./payment";
 export * from "./intraoral_exam"
 export * from "./dental_chart"
+export * from "./appointments"

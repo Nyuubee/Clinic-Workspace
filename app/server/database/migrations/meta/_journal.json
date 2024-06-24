@@ -239,6 +239,13 @@
       "when": 1717929129530,
       "tag": "0033_goofy_nighthawk",
       "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "6",
+      "when": 1719166653856,
+      "tag": "0034_shocking_joshua_kane",
+      "breakpoints": true
     }
   ]
 }
