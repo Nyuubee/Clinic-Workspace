@@ -1,61 +1,59 @@
 <template>
-    <div class="flex flex-col items-center">
-      <FormKit type="form" id="registration-example"
-
-      submit-label="Register"
-      @submit="onSubmit"
-
-      >
+  <div class="flex flex-col items-center">
+    <formkit>
       <div class="gap-y-4 gap-x-8 flex flex-col xl:flex-row" > 
       <!-- first name -->
-      <FormKit type="text" label="First Name" name="firstName" validation="required">
-      </FormKit>
+      <FormKit type="text" label="First Name" name="firstName" v-model="formData.firstName" validation="required"/>
       <!-- middle name -->
-      <FormKit type="text" label="Middle Name" name="middleName">
-      </FormKit>
+      <FormKit type="text" label="Middle Name" name="middleName" v-model="formData.middleName" />
       <!-- last name -->
-      <FormKit type="text" label="Last Name" name="lastName" validation="required">
-      </FormKit>
+      <FormKit type="text" label="Last Name" name="lastName" v-model="formData.lastName" validation="required"/>
       </div>
 
       <div class="gap-y-4 gap-x-8 flex flex-col xl:flex-row" > 
         <!-- Appointment Date -->
-      <FormKit type="date" label="Appointment Date" name="appointmentDate" placeholder="YYYY-MM-DD" validation="required"/>
-
+        <FormKit type="date" label="Appointment Date" name="appointmentDate" v-model="formData.appointmentDate" validation="required"/>
         <!-- Time form -->
-      <FormKit type="time" label="Time" name="appointmentTime" validation="required"/>
-
+        <FormKit type="time" label="Time" name="appointmentTime" v-model="formData.appointmentTime" validation="required"/>
         <!-- Purpose form -->
-      <FormKit type="text" label="Purpose" name="purpose" validation="required">
-      </FormKit>
+        <FormKit type="text" label="Purpose" name="purpose" v-model="formData.purpose" validation="required"/>
       </div>
 
-        <!-- Notes form -->
-      <FormKit type="textarea" label="Notes" name="notes" placeholder="Write down notes."/>
-
-        <!-- Register button -->
-      <FormKit type="submit" label="Register" prefix-icon="check"/>
-    </FormKit>
-    </div>
+      <!-- Notes form -->
+      <FormKit type="textarea" label="Notes" name="notes" v-model="formData.notes" placeholder="Write down notes." />
+      <!-- Register button -->
+      <FormKit type="submit" label="Register" @click="onSubmit" />
+    </formkit>
     
-    
+  </div>
 </template>
+
 <script setup lang="ts">
-import { appointments } from "~/server/database/schema";
-import type { SubmitHandler } from "~/utils/formkit";
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref } from 'vue';
+import FormInput from './FormInput.vue';
+import FormDate from './FormDate.vue';
+import FormTime from './FormTime.vue';
+import FormTextarea from './FormTextarea.vue';
+import FormSubmit from './FormSubmit.vue';
 
-const router = useRouter()
+const formData = ref({
+  firstName: '',
+  middleName: '',
+  lastName: '',
+  appointmentDate: '',
+  appointmentTime: '',
+  purpose: '',
+  notes: ''
+});
 
-const onSubmit = async (formData) => {
+const onSubmit = async () => {
   try {
     const response = await fetch('/api/appointments', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(formData.value),
     })
 
     if (!response.ok) {
@@ -71,8 +69,3 @@ const onSubmit = async (formData) => {
   }
 }
 </script>
-
-
-<style>
-
-</style>
