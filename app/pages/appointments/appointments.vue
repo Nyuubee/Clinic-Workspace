@@ -1,12 +1,26 @@
 <template>
   <main>
     <div class="flex flex-col justify-center">
-      <div role="tablist" class="tabs tabs-bordered">
+      <div class="tabs tabs-bordered" role="tablist">
         <input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="Upcoming" checked />
         <div role="tabpanel" class="tab-content p-10">
           <div class="overflow-x-auto">
+            <div class="relative mb-4">
+              <input
+                type="text"
+                placeholder="Search appointments by ID, name, or date..."
+                v-model="searchQuery"
+                class="input input-bordered mb-4"
+              />
+              <button
+                v-if="searchQuery"
+                @click="clearSearch"
+                class="absolute left-bordered mb-2"
+              >
+                <Icon name="material-symbols:close" class="text-lg" />
+              </button>
+            </div>
             <table class="table">
-              <!-- head -->
               <thead>
                 <tr>
                   <th>
@@ -23,13 +37,13 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(appointment, index) in appointments" :key="appointment.id" class="bg-base-200">
+                <tr v-for="(appointment, index) in paginatedAppointments" :key="appointment.id" class="bg-base-200">
                   <th>
                     <label>
                       <input type="checkbox" class="checkbox" :value="appointment.id" @change="toggleSelection(appointment.id, $event)" />
                     </label>
                   </th>
-                  <th>{{ index + 1 }}</th>
+                  <th>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</th>
                   <td>{{ appointment.firstName }} {{ appointment.middleName }} {{ appointment.lastName }}</td>
                   <td>{{ new Date(appointment.appointmentDate).toLocaleDateString() }}</td>
                   <td>{{ appointment.appointmentTime }}</td>
@@ -60,6 +74,15 @@
                 </tr>
               </tbody>
             </table>
+            <div class="flex justify-between items-center mt-4">
+              <button @click="prevPage" :disabled="currentPage === 1" class="btn btn-secondary">
+                Previous
+              </button>
+              <span>Page {{ currentPage }} of {{ totalPages }}</span>
+              <button @click="nextPage" :disabled="currentPage === totalPages" class="btn btn-secondary">
+                Next
+              </button>
+            </div>
           </div>
         </div>
         <!-- Appointment request -->
@@ -74,8 +97,12 @@
   </main>
 </template>
 
+
+
+
+
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 interface Appointment {
@@ -91,6 +118,9 @@ interface Appointment {
 
 const appointments = ref<Appointment[]>([])
 const selectedAppointments = ref<number[]>([])
+const searchQuery = ref('')
+const currentPage = ref(1)
+const itemsPerPage = 5
 
 const fetchAppointments = async () => {
   try {
@@ -120,6 +150,46 @@ const selectAll = (event: Event) => {
     selectedAppointments.value = appointments.value.map(app => app.id)
   } else {
     selectedAppointments.value = []
+  }
+}
+
+const clearSearch = () => {
+  searchQuery.value = ''
+}
+
+const filteredAppointments = computed(() => {
+  return appointments.value.filter(appointment => {
+    const searchTerm = searchQuery.value.toLowerCase()
+    const fullName = `${appointment.firstName} ${appointment.middleName} ${appointment.lastName}`.toLowerCase()
+    const appointmentDate = new Date(appointment.appointmentDate).toLocaleDateString().toLowerCase()
+    
+    return (
+      appointment.id.toString().includes(searchTerm) ||
+      fullName.includes(searchTerm) ||
+      appointmentDate.includes(searchTerm)
+    )
+  })
+})
+
+const paginatedAppointments = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return filteredAppointments.value.slice(start, end)
+})
+
+const totalPages = computed(() => {
+  return Math.ceil(filteredAppointments.value.length / itemsPerPage)
+})
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++
+  }
+}
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--
   }
 }
 
