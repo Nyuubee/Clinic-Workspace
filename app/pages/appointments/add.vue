@@ -1,40 +1,25 @@
 <template>
   <div class="flex flex-col items-center">
-    <formkit>
-      <div class="gap-y-4 gap-x-8 flex flex-col xl:flex-row" > 
-      <!-- first name -->
-      <FormKit type="text" label="First Name" name="firstName" v-model="formData.firstName" validation="required"/>
-      <!-- middle name -->
-      <FormKit type="text" label="Middle Name" name="middleName" v-model="formData.middleName" />
-      <!-- last name -->
-      <FormKit type="text" label="Last Name" name="lastName" v-model="formData.lastName" validation="required"/>
+    <form @submit.prevent="onSubmit">
+      <div class="gap-y-4 gap-x-8 flex flex-col xl:flex-row">
+        <FormKit type="text" label="First Name" name="firstName" v-model="formData.firstName" validation="required"/>
+        <FormKit type="text" label="Middle Name" name="middleName" v-model="formData.middleName" />
+        <FormKit type="text" label="Last Name" name="lastName" v-model="formData.lastName" validation="required"/>
       </div>
-
-      <div class="gap-y-4 gap-x-8 flex flex-col xl:flex-row" > 
-        <!-- Appointment Date -->
+      <div class="gap-y-4 gap-x-8 flex flex-col xl:flex-row">
         <FormKit type="date" label="Appointment Date" name="appointmentDate" v-model="formData.appointmentDate" validation="required"/>
-        <!-- Time form -->
         <FormKit type="time" label="Time" name="appointmentTime" v-model="formData.appointmentTime" validation="required"/>
-        <!-- Purpose form -->
         <FormKit type="text" label="Purpose" name="purpose" v-model="formData.purpose" validation="required"/>
       </div>
-
-      <!-- Notes form -->
       <FormKit type="textarea" label="Notes" name="notes" v-model="formData.notes" placeholder="Write down notes." />
-      <!-- Register button -->
-      <FormKit type="submit" label="Register" @click="onSubmit" />
-    </formkit>
-    
+      <FormKit type="submit" label="Register" />
+    </form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import FormInput from './FormInput.vue';
-import FormDate from './FormDate.vue';
-import FormTime from './FormTime.vue';
-import FormTextarea from './FormTextarea.vue';
-import FormSubmit from './FormSubmit.vue';
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 
 const formData = ref({
   firstName: '',
@@ -44,7 +29,25 @@ const formData = ref({
   appointmentTime: '',
   purpose: '',
   notes: ''
-});
+})
+
+const route = useRoute()
+
+onMounted(() => {
+  const { data } = route.query
+  if (data) {
+    const appointment = JSON.parse(data as string)
+    formData.value = {
+      firstName: appointment.firstName,
+      middleName: appointment.middleName,
+      lastName: appointment.lastName,
+      appointmentDate: appointment.appointmentDate,
+      appointmentTime: appointment.appointmentTime,
+      purpose: appointment.purpose,
+      notes: appointment.notes
+    }
+  }
+})
 
 const onSubmit = async () => {
   try {
@@ -62,10 +65,8 @@ const onSubmit = async () => {
 
     const result = await response.json()
     console.log('Success:', result)
-    // Navigate to another page or show success message
   } catch (error) {
     console.error('Error:', error)
-    // Handle error, show error message
   }
 }
 </script>

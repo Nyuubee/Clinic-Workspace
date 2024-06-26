@@ -6,19 +6,17 @@
         <div role="tabpanel" class="tab-content p-10">
           <div class="overflow-x-auto">
             <div class="relative mb-4">
-              <input
-                type="text"
-                placeholder="Search appointments by ID, name, or date..."
-                v-model="searchQuery"
-                class="input input-bordered mb-4"
-              />
-              <button
-                v-if="searchQuery"
-                @click="clearSearch"
-                class="absolute left-bordered mb-2"
-              >
-                <Icon name="material-symbols:close" class="text-lg" />
-              </button>
+              <div class="input-group">
+                <input
+                  type="text"
+                  placeholder="Search appointments"
+                  v-model="searchQuery"
+                  class="input input-bordered"
+                />
+                <button v-if="searchQuery" @click="clearSearch" class="btn btn-square btn-ghost">
+                  <Icon name="material-symbols:close" class="text-lg" />
+                </button>
+              </div>
             </div>
             <table class="table">
               <thead>
@@ -40,7 +38,7 @@
                 <tr v-for="(appointment, index) in paginatedAppointments" :key="appointment.id" class="bg-base-200">
                   <th>
                     <label>
-                      <input type="checkbox" class="checkbox" :value="appointment.id" @change="toggleSelection(appointment.id, $event)" />
+                      <input type="checkbox" class="checkbox" :value="appointment.id" @change="toggleSelection(appointment, $event)" />
                     </label>
                   </th>
                   <th>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</th>
@@ -57,9 +55,9 @@
                   <th>Actions:</th>
                   <td>
                     <NuxtLink
-                      :to="{ path: './add', query: { id: selectedAppointments[0] } }"
+                      :to="{ path: './add', query: { data: JSON.stringify(selectedAppointment) } }"
                       class="btn btn-success join-item"
-                      :class="{ 'btn-disabled': selectedAppointments.length !== 1 }"
+                      :class="{ 'btn-disabled': !selectedAppointment }"
                     >
                       <Icon name="material-symbols:edit" class="text text-lg" />
                       Update
@@ -85,7 +83,6 @@
             </div>
           </div>
         </div>
-        <!-- Appointment request -->
         <input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="Appointment Requests" />
         <div role="tabpanel" class="tab-content p-10"></div>
         <input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="Completed" />
@@ -96,10 +93,6 @@
     </div>
   </main>
 </template>
-
-
-
-
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
@@ -118,6 +111,7 @@ interface Appointment {
 
 const appointments = ref<Appointment[]>([])
 const selectedAppointments = ref<number[]>([])
+const selectedAppointment = ref<Appointment | null>(null)
 const searchQuery = ref('')
 const currentPage = ref(1)
 const itemsPerPage = 5
@@ -135,12 +129,16 @@ const fetchAppointments = async () => {
   }
 }
 
-const toggleSelection = (id: number, event: Event) => {
+const toggleSelection = (appointment: Appointment, event: Event) => {
   const checkbox = event.target as HTMLInputElement
   if (checkbox.checked) {
-    selectedAppointments.value.push(id)
+    selectedAppointments.value.push(appointment.id)
+    selectedAppointment.value = appointment
   } else {
-    selectedAppointments.value = selectedAppointments.value.filter(appId => appId !== id)
+    selectedAppointments.value = selectedAppointments.value.filter(appId => appId !== appointment.id)
+    if (selectedAppointment.value?.id === appointment.id) {
+      selectedAppointment.value = null
+    }
   }
 }
 
@@ -148,8 +146,10 @@ const selectAll = (event: Event) => {
   const checkbox = event.target as HTMLInputElement
   if (checkbox.checked) {
     selectedAppointments.value = appointments.value.map(app => app.id)
+    selectedAppointment.value = null // or handle multiple selection logic
   } else {
     selectedAppointments.value = []
+    selectedAppointment.value = null
   }
 }
 
@@ -181,19 +181,21 @@ const totalPages = computed(() => {
   return Math.ceil(filteredAppointments.value.length / itemsPerPage)
 })
 
-const nextPage = () => {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++
-  }
-}
-
 const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--
   }
 }
 
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++
+  }
+}
+
 onMounted(() => {
   fetchAppointments()
 })
+
 </script>
+
