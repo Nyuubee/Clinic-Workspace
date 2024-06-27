@@ -2,7 +2,9 @@
   <main>
     <div class="flex flex-col justify-center">
       <div class="tabs tabs-bordered" role="tablist">
-        <input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="Upcoming" checked />
+        
+        <!-- Appointment request -->
+        <input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="Appointment Requests" checked />
         <div role="tabpanel" class="tab-content p-10">
           <div class="overflow-x-auto">
             <div class="relative mb-4">
@@ -25,11 +27,7 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th>
-                    <label>
-                      <input type="checkbox" class="checkbox" @change="selectAll" />
-                    </label>
-                  </th>
+                  <th></th>
                   <th>#</th>
                   <th>Name</th>
                   <th>Appointment Date</th>
@@ -42,7 +40,7 @@
                 <tr v-for="(appointment, index) in paginatedAppointments" :key="appointment.id" class="bg-base-200">
                   <th>
                     <label>
-                      <input type="checkbox" class="checkbox" :value="appointment.id" @change="toggleSelection(appointment, $event)" />
+                      <input type="checkbox" class="checkbox" :value="appointment.id" @change="toggleSelection(appointment, $event)" :checked="isSelected(appointment.id)" />
                     </label>
                   </th>
                   <th>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</th>
@@ -87,9 +85,6 @@
             </div>
           </div>
         </div>
-        <!-- Appointment request -->
-        <input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="Appointment Requests" />
-        <div role="tabpanel" class="tab-content p-10"></div>
         <input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="Completed" />
         <div role="tabpanel" class="tab-content p-10">Completed</div>
         <input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="Cancelled" />
@@ -136,19 +131,14 @@ const fetchAppointments = async () => {
 const toggleSelection = (appointment: Appointment, event: Event) => {
   const checkbox = event.target as HTMLInputElement
   if (checkbox.checked) {
-    selectedAppointments.value.push(appointment)
-  } else {
-    selectedAppointments.value = selectedAppointments.value.filter(app => app.id !== appointment.id)
-  }
-}
-
-const selectAll = (event: Event) => {
-  const checkbox = event.target as HTMLInputElement
-  if (checkbox.checked) {
-    selectedAppointments.value = [...appointments.value]
+    selectedAppointments.value = [appointment]
   } else {
     selectedAppointments.value = []
   }
+}
+
+const isSelected = (id: number) => {
+  return selectedAppointments.value.some(app => app.id === id)
 }
 
 const clearSearch = () => {
@@ -204,7 +194,6 @@ const navigateToUpdate = () => {
     })
   }
 }
-
 
 onMounted(() => {
   fetchAppointments()
