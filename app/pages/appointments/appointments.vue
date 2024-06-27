@@ -71,6 +71,24 @@
                       Add
                     </NuxtLink>
                   </td>
+                  <td>
+                    <button
+                      class="btn btn-secondary join-item"
+                      :class="{ 'btn-disabled': selectedAppointments.length !== 1 }"
+                    >
+                      <Icon name="material-symbols:check" class="text text-lg" />
+                      Complete
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      class="btn btn-warning join-item"
+                      :class="{ 'btn-disabled': selectedAppointments.length !== 1 }"
+                    >
+                      <Icon name="material-symbols:cancel" class="text text-lg" />
+                      Cancel
+                    </button>
+                  </td>
                 </tr>
               </tbody>
             </table>
