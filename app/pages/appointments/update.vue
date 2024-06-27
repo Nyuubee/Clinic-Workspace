@@ -1,34 +1,39 @@
 <template>
-    <div class="flex flex-col items-center">
-      <formkit>
-        <div class="gap-y-4 gap-x-8 flex flex-col xl:flex-row">
-          <!-- first name -->
-          <FormKit type="text" label="First Name" name="firstName" v-model="formData.firstName" validation="required"/>
-          <!-- middle name -->
-          <FormKit type="text" label="Middle Name" name="middleName" v-model="formData.middleName"/>
-          <!-- last name -->
-          <FormKit type="text" label="Last Name" name="lastName" v-model="formData.lastName" validation="required"/>
-        </div>
-  
-        <div class="gap-y-4 gap-x-8 flex flex-col xl:flex-row">
-          <!-- Appointment Date -->
-          <FormKit type="date" label="Appointment Date" name="appointmentDate" v-model="formData.appointmentDate" validation="required"/>
-          <!-- Time form -->
-          <FormKit type="time" label="Time" name="appointmentTime" v-model="formData.appointmentTime" validation="required"/>
-          <!-- Purpose form -->
-          <FormKit type="text" label="Purpose" name="purpose" v-model="formData.purpose" validation="required"/>
-        </div>
-  
-        <!-- Notes form -->
-        <FormKit type="textarea" label="Notes" name="notes" v-model="formData.notes" placeholder="Write down notes." />
-        <!-- Register button -->
-        <FormKit type="submit" label="Update" @click="onSubmit" />
-      </formkit>
-    </div>
-  </template>
-  
-  
-  <script setup lang="ts">
+  <div class="flex flex-col items-center">
+    <formkit>
+      <div class="gap-y-4 gap-x-8 flex flex-col xl:flex-row">
+        <!-- first name -->
+        <FormKit type="text" label="First Name" name="firstName" v-model="formData.firstName" validation="required"/>
+        <!-- middle name -->
+        <FormKit type="text" label="Middle Name" name="middleName" v-model="formData.middleName"/>
+        <!-- last name -->
+        <FormKit type="text" label="Last Name" name="lastName" v-model="formData.lastName" validation="required"/>
+      </div>
+
+      <div class="gap-y-4 gap-x-8 flex flex-col xl:flex-row">
+        <!-- Appointment Date -->
+        <FormKit type="date" label="Appointment Date" name="appointmentDate" v-model="formData.appointmentDate" validation="required"/>
+        <!-- Time form -->
+        <FormKit type="time" label="Time" name="appointmentTime" v-model="formData.appointmentTime" validation="required"/>
+        <!-- Purpose form -->
+        <FormKit type="text" label="Purpose" name="purpose" v-model="formData.purpose" validation="required"/>
+      </div>
+
+      <!-- Notes form -->
+      <FormKit type="textarea" label="Notes" name="notes" v-model="formData.notes" placeholder="Write down notes." />
+      
+      <!-- Update button -->
+      <div class="mt-4">
+        <button :disabled="isSubmitted" type="submit" @click="onSubmit" class="btn btn-primary">
+          <Icon name="material-symbols:edit" class="text text-lg" />
+          {{ isSubmitted ? 'Updated!' : 'Update' }}
+        </button>
+      </div>
+    </formkit>
+  </div>
+</template>
+
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -54,6 +59,8 @@ const formData = ref<FormData>({
   purpose: '',
   notes: ''
 })
+
+const isSubmitted = ref(false);
 
 const fetchAppointment = async (id: number) => {
   try {
@@ -104,6 +111,7 @@ const onSubmit = async (event: Event) => {
 
     // Handle successful update, e.g., navigate back to the appointments page
     console.log('Appointment updated successfully')
+    isSubmitted.value = true; // Change button text and disable button
   } catch (error) {
     console.error('Error updating appointment:', error.message)
   }
