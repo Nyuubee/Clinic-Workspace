@@ -6,19 +6,21 @@
         <div role="tabpanel" class="tab-content p-10">
           <div class="overflow-x-auto">
             <div class="relative mb-4">
-              <input
-                type="text"
-                placeholder="Search appointments by ID, name, or date..."
-                v-model="searchQuery"
-                class="input input-bordered mb-4"
-              />
-              <button
-                v-if="searchQuery"
-                @click="clearSearch"
-                class="absolute left-bordered mb-2"
-              >
-                <Icon name="material-symbols:close" class="text-lg" />
-              </button>
+              <div class="input-group">
+                <input
+                  type="text"
+                  placeholder="Search appointments"
+                  v-model="searchQuery"
+                  class="input input-bordered"
+                />
+                <button
+                  v-if="searchQuery"
+                  @click="clearSearch"
+                  class="btn btn-square btn-ghost"
+                >
+                  <Icon name="material-symbols:close" class="text-lg" />
+                </button>
+              </div>
             </div>
             <table class="table">
               <thead>
@@ -40,7 +42,7 @@
                 <tr v-for="(appointment, index) in paginatedAppointments" :key="appointment.id" class="bg-base-200">
                   <th>
                     <label>
-                      <input type="checkbox" class="checkbox" :value="appointment.id" @change="toggleSelection(appointment.id, $event)" />
+                      <input type="checkbox" class="checkbox" :value="appointment.id" @change="toggleSelection(appointment, $event)" />
                     </label>
                   </th>
                   <th>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</th>
@@ -56,15 +58,14 @@
                   <td></td>
                   <th>Actions:</th>
                   <td>
-                    <NuxtLink
-                      :to="{ path: './update', query: { id: selectedAppointments[0] } }"
+                    <button
+                      @click="navigateToUpdate"
                       class="btn btn-success join-item"
                       :class="{ 'btn-disabled': selectedAppointments.length !== 1 }"
                     >
                       <Icon name="material-symbols:edit" class="text text-lg" />
                       Update
-                    </NuxtLink>
-
+                    </button>
                   </td>
                   <td>
                     <NuxtLink href="./add" class="btn btn-primary join-item">
@@ -98,10 +99,6 @@
   </main>
 </template>
 
-
-
-
-
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
@@ -118,7 +115,7 @@ interface Appointment {
 }
 
 const appointments = ref<Appointment[]>([])
-const selectedAppointments = ref<number[]>([])
+const selectedAppointments = ref<Appointment[]>([])
 const searchQuery = ref('')
 const currentPage = ref(1)
 const itemsPerPage = 5
@@ -136,19 +133,19 @@ const fetchAppointments = async () => {
   }
 }
 
-const toggleSelection = (id: number, event: Event) => {
+const toggleSelection = (appointment: Appointment, event: Event) => {
   const checkbox = event.target as HTMLInputElement
   if (checkbox.checked) {
-    selectedAppointments.value.push(id)
+    selectedAppointments.value.push(appointment)
   } else {
-    selectedAppointments.value = selectedAppointments.value.filter(appId => appId !== id)
+    selectedAppointments.value = selectedAppointments.value.filter(app => app.id !== appointment.id)
   }
 }
 
 const selectAll = (event: Event) => {
   const checkbox = event.target as HTMLInputElement
   if (checkbox.checked) {
-    selectedAppointments.value = appointments.value.map(app => app.id)
+    selectedAppointments.value = [...appointments.value]
   } else {
     selectedAppointments.value = []
   }
@@ -191,6 +188,27 @@ const nextPage = () => {
 const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--
+  }
+}
+
+const router = useRouter()
+
+const navigateToUpdate = () => {
+  if (selectedAppointments.value.length === 1) {
+    const appointment = selectedAppointments.value[0]
+    router.push({
+      path: './update',
+      query: {
+        id: appointment.id,
+        firstName: appointment.firstName,
+        middleName: appointment.middleName,
+        lastName: appointment.lastName,
+        appointmentDate: appointment.appointmentDate,
+        appointmentTime: appointment.appointmentTime,
+        purpose: appointment.purpose,
+        notes: appointment.notes
+      }
+    })
   }
 }
 
