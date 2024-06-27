@@ -199,18 +199,12 @@ const navigateToUpdate = () => {
     router.push({
       path: './update',
       query: {
-        id: appointment.id,
-        firstName: appointment.firstName,
-        middleName: appointment.middleName,
-        lastName: appointment.lastName,
-        appointmentDate: appointment.appointmentDate,
-        appointmentTime: appointment.appointmentTime,
-        purpose: appointment.purpose,
-        notes: appointment.notes
+        id: appointment.id
       }
     })
   }
 }
+
 
 onMounted(() => {
   fetchAppointments()

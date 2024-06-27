@@ -5,7 +5,7 @@
           <!-- first name -->
           <FormKit type="text" label="First Name" name="firstName" v-model="formData.firstName" validation="required"/>
           <!-- middle name -->
-          <FormKit type="text" label="Middle Name" name="middleName" v-model="formData.middleName" />
+          <FormKit type="text" label="Middle Name" name="middleName" v-model="formData.middleName"/>
           <!-- last name -->
           <FormKit type="text" label="Last Name" name="lastName" v-model="formData.lastName" validation="required"/>
         </div>
@@ -27,69 +27,85 @@
     </div>
   </template>
   
+  
   <script setup lang="ts">
-  import { ref, onMounted } from 'vue'
-  import { useRoute } from 'vue-router'
-  
-  interface FormData {
-    id: number
-    firstName: string
-    middleName: string
-    lastName: string
-    appointmentDate: string
-    appointmentTime: string
-    purpose: string
-    notes: string
-  }
-  
-  const route = useRoute()
-  const formData = ref<FormData>({
-    id: 0,
-    firstName: '',
-    middleName: '',
-    lastName: '',
-    appointmentDate: '',
-    appointmentTime: '',
-    purpose: '',
-    notes: ''
-  })
-  
-  onMounted(() => {
-    const query = route.query
-  
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+
+interface FormData {
+  id: number
+  firstName: string
+  middleName: string
+  lastName: string
+  appointmentDate: string
+  appointmentTime: string
+  purpose: string
+  notes: string
+}
+
+const route = useRoute()
+const formData = ref<FormData>({
+  id: 0,
+  firstName: '',
+  middleName: '',
+  lastName: '',
+  appointmentDate: '',
+  appointmentTime: '',
+  purpose: '',
+  notes: ''
+})
+
+const fetchAppointment = async (id: number) => {
+  try {
+    const response = await fetch(`/api/appointments/${id}`)
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.error || 'Failed to fetch appointment')
+    }
+    const data = await response.json()
     formData.value = {
-      id: Number(query.id),
-      firstName: query.firstName as string,
-      middleName: query.middleName as string,
-      lastName: query.lastName as string,
-      appointmentDate: query.appointmentDate as string,
-      appointmentTime: query.appointmentTime as string,
-      purpose: query.purpose as string,
-      notes: query.notes as string
+      id: data.id,
+      firstName: data.firstName,
+      middleName: data.middleName,
+      lastName: data.lastName,
+      appointmentDate: data.appointmentDate,
+      appointmentTime: data.appointmentTime,
+      purpose: data.purpose,
+      notes: data.notes
     }
-  })
-  
-  const onSubmit = async (event: Event) => {
-    event.preventDefault()
-  
-    try {
-      const response = await fetch(`/api/appointments/${formData.value.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData.value)
-      })
-  
-      if (!response.ok) {
-        throw new Error('Failed to update appointment')
-      }
-  
-      // Handle successful update, e.g., navigate back to the appointments page
-      console.log('Appointment updated successfully')
-    } catch (error) {
-      console.error('Error updating appointment:', error)
-    }
+  } catch (error) {
+    console.error('Error fetching appointment:', error.message)
   }
-  </script>
-  
+}
+
+onMounted(() => {
+  const id = route.query.id
+  if (id) {
+    fetchAppointment(Number(id))
+  }
+})
+
+const onSubmit = async (event: Event) => {
+  event.preventDefault()
+
+  try {
+    const response = await fetch(`/api/appointments/${formData.value.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData.value)
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.error || 'Failed to update appointment')
+    }
+
+    // Handle successful update, e.g., navigate back to the appointments page
+    console.log('Appointment updated successfully')
+  } catch (error) {
+    console.error('Error updating appointment:', error.message)
+  }
+}
+</script>
